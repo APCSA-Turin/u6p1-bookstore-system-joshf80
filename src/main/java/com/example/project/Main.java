@@ -10,7 +10,7 @@ public class Main {
 
         System.out.println("**************************************************");
         System.out.println("*                                                *");
-        System.out.println("*          📚 Welcome to Book Store 📚           *");
+        System.out.println("*          📚 Welcome to Book Haven 📚           *");
         System.out.println("*                                                *");
         System.out.println("**************************************************");
         System.out.println("    A world of books and readers awaits you!");
@@ -24,7 +24,9 @@ public class Main {
             System.out.println("[4] Register a User");
             System.out.println("[5] Remove a User");
             System.out.println("[6] Show All Users");
-            System.out.println("[7] Exit");
+            System.out.println("[7] Check Out a Book");
+            System.out.println("[8] Check In a Book");
+            System.out.println("[9] Exit");
             System.out.print("Enter your choice: ");
             
             int choice = scanner.nextInt();
@@ -118,11 +120,110 @@ public class Main {
                         System.out.println(user.userInfo());
                     }
                 }
-            } else if (choice == 7) { // quit
-                System.out.println("👋 Thank you for using Book Haven! Goodbye!");
+            } else if (choice == 7) { // Check out a book
+                System.out.print("Enter User Name: ");
+                String userName = scanner.nextLine();
+
+                System.out.print("Enter Book Title: ");
+                String bookTitle = scanner.nextLine();
+
+                User[] users = bookStore.getUsers();
+                Book[] books = bookStore.getBooks();
+                User foundUser = null;
+                Book foundBook = null;
+
+                // Find user and book
+                for (User user : users) {
+                    if (user != null && user.getName().equals(userName)) {
+                        foundUser = user;
+                        break;
+                    }
+                }
+
+                for (Book book : books) {
+                    if (book != null && book.getTitle().equals(bookTitle)) {
+                        foundBook = book;
+                        break;
+                    }
+                }
+
+                if (foundUser != null && foundBook != null) {
+                    Book[] userBooks = foundUser.getBooks();
+                    boolean added = false;
+                    for (int i = 0; i < userBooks.length; i++) {
+                        if (userBooks[i] == null) {
+                            userBooks[i] = foundBook;
+                            foundUser.setBooks(userBooks);
+                            foundBook.setQuantity(foundBook.getQuantity() - 1);
+                            System.out.println("✅ Book checked out successfully");
+                            added = true;
+                            break;
+                        }
+                    }
+                    if (!added) {
+                        System.out.println("❌ User has already borrowed maximum books");
+                    }
+                } else {
+                    if (foundUser == null) {
+                        System.out.println("❌ User not found");
+                    }
+                    if (foundBook == null) {
+                        System.out.println("❌ Book not found or unavailable");
+                    }
+                }
+            } else if (choice == 8) { // Check in a book
+                System.out.print("Enter User Name: ");
+                String userName = scanner.nextLine();
+
+                System.out.print("Enter Book Title: ");
+                String bookTitle = scanner.nextLine();
+
+                User[] users = bookStore.getUsers();
+                User foundUser = null;
+
+                // Find user
+                for (User user : users) {
+                    if (user != null && user.getName().equals(userName)) {
+                        foundUser = user;
+                        break;
+                    }
+                }
+
+                if (foundUser != null) {
+                    Book[] userBooks = foundUser.getBooks();
+                    boolean removed = false;
+
+                    for (int i = 0; i < userBooks.length; i++) {
+                        if (userBooks[i] != null && userBooks[i].getTitle().equals(bookTitle)) {
+                            Book bookToReturn = userBooks[i];
+                            userBooks[i] = null;
+                            foundUser.setBooks(userBooks);
+
+                            // Increment book quantity in the store
+                            Book[] books = bookStore.getBooks();
+                            for (Book book : books) {
+                                if (book.getTitle().equals(bookTitle)) {
+                                    book.setQuantity(book.getQuantity() + 1);
+                                    break;
+                                }
+                            }
+
+                            System.out.println("✅ Book checked in successfully!");
+                            removed = true;
+                            break;
+                        }
+                    }
+                    if (!removed) {
+                        System.out.println("❌ User does not have this book");
+                    }
+                } else {
+                    System.out.println("❌ User not found");
+                }
+            } else if (choice == 9) { // quit
+                System.out.println("👋 Thank you for using Book Haven!");
                 break;
             } else { // invalid input
-                System.out.println("❌ Invalid choice. Please try again.");
+                System.out.println("❌ Invalid choice");
             }
         }
 
