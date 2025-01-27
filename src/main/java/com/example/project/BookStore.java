@@ -22,7 +22,7 @@ public class BookStore {
     }
 
     
-    // Adds a new user to the bookstore if there is space available (i.e., if the position is null)
+    // Adds a new user to the bookstore
     public void addUser(User user) {
         // Loop through the users array to find an empty spot
         for (int i = 0; i < users.length; i++) {
@@ -34,7 +34,7 @@ public class BookStore {
         }
     }
 
-    // Removes a user from the bookstore. Sets the user position to null and consolidates the users array.
+    // Removes a user from the bookstore and consolidates array
     public void removeUser(User user) {
         // Loop through the users array to find the user to remove
         for (int i = 0; i < users.length; i++) {
@@ -48,13 +48,13 @@ public class BookStore {
         consolidateUsers();
     }
 
-    // Consolidates the users array by removing any null values, shifting non-null users into a new array
+    // Consolidates the users array by removing any null values shifting users into a new array
     public void consolidateUsers() {
-        // Create a temporary array with the same size as the current users array
+        // Create a new array with the same size as the current users array
         User[] temp = new User[users.length];
         int index = 0;
 
-        // Loop through the users and copy non-null elements into new array
+        // Loop through the users and copy non null elements into new array
         for (User user : users) {
             if (user != null) {
                 temp[index++] = user;
@@ -85,13 +85,13 @@ public class BookStore {
     }
     
 
-    // Removes a book from the bookstore by either reducing its quantity or setting it to null
+    // Removes a book from the bookstore
     public void removeBook(Book book) {
         // Loop through the books array to find the book to remove
         for (int i = 0; i < books.length; i++) {
             // If the book is found
             if (books[i] == book) {
-                // If the books quantity is 1, remove it from the array (set to null)
+                // If the books quantity is at 1, remove it from the array
                 if (books[i].getQuantity() == 1) {
                     books[i] = null;
                 } else {
@@ -104,7 +104,7 @@ public class BookStore {
         consolidateBooks();
     }
 
-    // Consolidates the books array by removing any null values and creating a new array with only non-null books
+    // Consolidates the books array by removing any null values and creating a new array with remaining elements
     public void consolidateBooks() {
         // Count the number of non-null books in the current array
         int nonNullCount = 0;
@@ -129,9 +129,9 @@ public class BookStore {
         books = temp;
     }
 
-    // Inserts a new book at a specific index in the books array, shifting the other books to accommodate the new one
+    // Inserts a new book at a specific index and shifts other books
     public void insertBook(Book book, int index) {
-        // Create a new array that is one element longer than the current books array to make space
+        // Create a new array to make space
         Book[] newBooks = new Book[books.length + 1];
     
         // Copy all books up to the insertion index
@@ -139,10 +139,10 @@ public class BookStore {
             newBooks[i] = books[i];
         }
     
-        // Insert the new book
+        // Insert new book
         newBooks[index] = book;
     
-        // Copy the remaining books after the insertion
+        // Copy remaining books 
         for (int i = index; i < books.length; i++) {
             newBooks[i + 1] = books[i];
         }
